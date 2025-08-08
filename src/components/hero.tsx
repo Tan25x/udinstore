@@ -15,10 +15,10 @@ export default function Hero() {
         className="space-y-6 text-center md:text-left"
       >
         <h1 className="text-4xl font-bold tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl font-headline">
-          Instant Robux Top-Ups, <span className="text-primary">Seamlessly</span>.
+          The <span className="text-primary">Cheapest & Easiest</span> Robux Top-Ups.
         </h1>
         <p className="max-w-[600px] text-muted-foreground md:text-xl">
-          Get your Robux in minutes with our secure and automated top-up service. No passwords, no hassle. Just pure gaming fuel.
+          Get the best prices for Robux with our secure and automated top-up service. No passwords, no hassle. Just pure gaming fuel.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row justify-center md:justify-start">
           <Link href="#top-up">
