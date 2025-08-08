@@ -7,10 +7,8 @@ import { Button } from './ui/button';
 
 export default function Header() {
   const navItems = [
-    { name: 'Top-Up', href: '#top-up' },
-    { name: 'Tutorial', href: '#' },
-    { name: 'Calculator', href: '#' },
-    { name: 'Admin', href: '#' },
+    { name: 'Top-Up', href: '/#top-up' },
+    { name: 'Tutorial', href: '/tutorial' },
   ];
 
   return (
@@ -35,6 +33,9 @@ export default function Header() {
               {item.name}
             </Link>
           ))}
+          <Link href="/admin" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+            Admin
+          </Link>
         </nav>
         <Button asChild className="hidden md:flex" size="sm">
             <Link href="#top-up">Get Started</Link>

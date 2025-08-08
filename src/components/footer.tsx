@@ -1,6 +1,6 @@
 'use client'
 
-import { Gem, Github, Twitter } from 'lucide-react'
+import { Gem, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Footer() {
@@ -15,12 +15,10 @@ export default function Footer() {
             </Link>
             <p className="text-sm text-muted-foreground">Secure & Instant Robux Top-Ups.</p>
              <div className="flex gap-4 pt-2">
-              <Link href="#" aria-label="Twitter">
-                <Twitter className="h-5 w-5 text-muted-foreground transition-colors hover:text-primary" />
-              </Link>
-              <Link href="#" aria-label="GitHub">
-                <Github className="h-5 w-5 text-muted-foreground transition-colors hover:text-primary" />
-              </Link>
+               <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MessageSquare className="h-5 w-5" />
+                <span>Need help? Hit me up on Discord!</span>
+              </div>
             </div>
           </div>
           <div className="col-span-2 space-y-4">
