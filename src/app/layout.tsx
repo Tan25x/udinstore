@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'RbxTopUp - Cheapest & Easiest Robux Top-Ups',
+  title: 'ud1nshp - Cheapest & Easiest Robux Top-Ups',
   description: 'The cheapest, fastest and easiest way to top up your Robux. Secure payments and instant delivery.',
 };
 

@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="space-y-2">
             <Link href="/" className="flex items-center gap-2">
               <Gem className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-foreground">RbxTopUp</span>
+              <span className="text-xl font-bold text-foreground">ud1nshp</span>
             </Link>
             <p className="text-sm text-muted-foreground">Secure & Instant Robux Top-Ups.</p>
              <div className="flex gap-4 pt-2">
@@ -34,7 +34,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-primary/10 pt-4 text-center text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} RbxTopUp. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} ud1nshp. All rights reserved.</p>
         </div>
       </div>
     </footer>

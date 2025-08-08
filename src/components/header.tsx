@@ -23,7 +23,7 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Gem className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold text-foreground">RbxTopUp</span>
+          <span className="text-xl font-bold text-foreground">ud1nshp</span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (
