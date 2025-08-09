@@ -6,9 +6,6 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 
 export default function Header() {
-  const navItems = [
-    { name: 'Top-Up', href: '/#top-up' },
-  ];
 
   return (
     <motion.header
@@ -22,17 +19,6 @@ export default function Header() {
           <Gem className="h-6 w-6 text-primary" />
           <span className="text-xl font-bold text-foreground">ud1nshp</span>
         </Link>
-        <nav className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
         <div className="hidden md:flex items-center gap-2">
             <Button asChild size="sm">
                 <Link href="/#top-up">Buy Now</Link>
