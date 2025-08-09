@@ -9,7 +9,7 @@ export default function Pricing() {
             Top-Up Your Robux
           </h2>
           <p className="mt-4 text-muted-foreground md:text-xl">
-            Get the best market price. Choose a preset amount or enter a custom value. We'll handle the tax calculations for you.
+            Get the best market price. Choose a preset amount and we'll handle the tax calculations for you.
           </p>
         </div>
         <div className="mt-16">
