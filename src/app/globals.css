@@ -69,3 +69,69 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* From Uiverse.io by dylanharriscameron - customized for this app */
+.glass-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 1rem; /* 16px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  /* Using theme colors */
+  box-shadow: 20px 20px 60px hsla(var(--primary), 0.1), -20px -20px 60px hsla(var(--accent), 0.1);
+}
+
+.glass-card-bg {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  z-index: 2;
+  background: hsla(var(--card) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0.875rem; /* 14px */
+  overflow: hidden;
+  outline: 2px solid hsla(var(--foreground) / 0.1);
+}
+
+.glass-card-blob {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  padding-bottom: 50%;
+  border-radius: 50%;
+  background-color: hsla(var(--primary) / 0.5);
+  opacity: 1;
+  filter: blur(24px);
+  animation: blob-bounce 8s infinite ease;
+}
+
+@keyframes blob-bounce {
+  0% {
+    transform: translate(-100%, -100%) translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate(-100%, -100%) translate3d(100%, 0, 0);
+  }
+
+  50% {
+    transform: translate(-100%, -100%) translate3d(100%, 100%, 0);
+  }
+
+  75% {
+    transform: translate(-100%, -100%) translate3d(0, 100%, 0);
+  }
+
+  100% {
+    transform: translate(-100%, -100%) translate3d(0, 0, 0);
+  }
+}
