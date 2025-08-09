@@ -10,11 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Calculator, Loader2, Sparkles } from 'lucide-react';
+import { Calculator, Gem, Loader2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 const RobuxTopUpSchema = z.object({
   username: z.string().min(3, { message: 'Username must be at least 3 characters.' }),
@@ -196,31 +196,29 @@ export function RobuxTopUpForm() {
                     <CardDescription>Select a preset amount for a quick top-up.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Robux</TableHead>
-                                <TableHead>Price (Rp)</TableHead>
-                                <TableHead></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {priceList.map(({ robux, price, discount }) => (
-                                <TableRow key={robux}>
-                                    <TableCell className="font-medium flex items-center gap-2">
-                                        {robux} R$
-                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
-                                    </TableCell>
-                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux)}>
-                                            Select
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {priceList.map(({ robux, price, discount }) => (
+                            <div
+                                key={robux}
+                                onClick={() => handlePriceSelect(robux)}
+                                className={cn(
+                                    "relative cursor-pointer rounded-lg border-2 bg-input/50 p-4 text-center transition-all hover:border-primary/80 hover:bg-input",
+                                    robuxAmount === robux ? "border-primary bg-input" : "border-input"
+                                )}
+                            >
+                                {discount && (
+                                    <Badge variant="destructive" className="absolute -top-3 -right-3 text-xs">
+                                        {discount}
+                                    </Badge>
+                                )}
+                                <div className="mb-2 flex justify-center">
+                                    <Gem className="h-8 w-8 text-primary" />
+                                </div>
+                                <p className="font-semibold">{robux} Robux</p>
+                                <p className="text-xs text-muted-foreground">Rp {price.toLocaleString('id-ID')}</p>
+                            </div>
+                        ))}
+                    </div>
                 </CardContent>
             </Card>
         </div>
