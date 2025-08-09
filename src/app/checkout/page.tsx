@@ -23,6 +23,7 @@ const RobuxCheckoutSchema = z.object({
   robuxAmount: z.number(),
   gamepassUrl: z.string().url({ message: 'Please enter a valid Game Pass URL.' }),
   coupon: z.string().optional(),
+  discordUsername: z.string().optional(),
 });
 
 type RobuxCheckoutFormValues = z.infer<typeof RobuxCheckoutSchema>;
@@ -40,6 +41,8 @@ function CheckoutForm() {
   const username = searchParams.get('username') || '';
   const robuxAmount = Number(searchParams.get('robuxAmount')) || 0;
   const gamepassPrice = Number(searchParams.get('gamepassPrice')) || 0;
+  const gamepassUrl = searchParams.get('gamepassUrl') || '';
+  const discordUsername = searchParams.get('discordUsername') || '';
   const totalPrice = robuxAmount * PRICE_PER_ROBUX;
 
   const form = useForm<RobuxCheckoutFormValues>({
@@ -47,13 +50,14 @@ function CheckoutForm() {
     defaultValues: {
       username: username,
       robuxAmount: robuxAmount,
-      gamepassUrl: '',
+      gamepassUrl: gamepassUrl,
       coupon: '',
+      discordUsername: discordUsername,
     },
   });
 
   useEffect(() => {
-    if (!username || !robuxAmount) {
+    if (!username || !robuxAmount || !gamepassUrl) {
         toast({
             title: 'Error',
             description: 'Missing order details. Please start again.',
@@ -61,7 +65,7 @@ function CheckoutForm() {
         });
         router.push('/');
     }
-  }, [username, robuxAmount, router, toast]);
+  }, [username, robuxAmount, gamepassUrl, router, toast]);
   
 
   const onSubmit: SubmitHandler<RobuxCheckoutFormValues> = async (data) => {
@@ -109,7 +113,7 @@ function CheckoutForm() {
                           <FormItem>
                             <FormLabel>Gamepass Link</FormLabel>
                             <FormControl>
-                              <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-input" />
+                              <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-input" readOnly/>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -134,6 +138,12 @@ function CheckoutForm() {
                             </p>
                         </FormItem>
                       </div>
+                       {discordUsername && <FormItem>
+                          <FormLabel>Discord Username</FormLabel>
+                          <FormControl>
+                            <Input readOnly value={discordUsername} className="bg-input" />
+                          </FormControl>
+                        </FormItem>}
                     </div>
                   </div>
 

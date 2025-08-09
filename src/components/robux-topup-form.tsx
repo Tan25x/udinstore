@@ -22,6 +22,8 @@ const RobuxTopUpSchema = z.object({
     (val) => Number(String(val)),
     z.number().min(70, { message: 'Minimum 70 Robux.' }).max(10000, { message: 'Maximum 10,000 Robux.' })
   ),
+  gamepassUrl: z.string().url({ message: 'Please enter a valid Game Pass URL.' }),
+  discordUsername: z.string().optional(),
 });
 
 type RobuxTopUpFormValues = z.infer<typeof RobuxTopUpSchema>;
@@ -47,6 +49,8 @@ export function RobuxTopUpForm() {
     defaultValues: {
       username: '',
       robuxAmount: 100,
+      gamepassUrl: '',
+      discordUsername: '',
     },
   });
   
@@ -65,49 +69,18 @@ export function RobuxTopUpForm() {
       username: data.username,
       robuxAmount: data.robuxAmount.toString(),
       gamepassPrice: gamepassPrice.toString(),
+      gamepassUrl: data.gamepassUrl,
     });
+
+    if (data.discordUsername) {
+        params.set('discordUsername', data.discordUsername);
+    }
     
     router.push(`/checkout?${params.toString()}`);
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        {/* Price List */}
-        <div className="lg:col-span-1">
-            <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
-                <CardHeader>
-                    <CardTitle>Price List</CardTitle>
-                    <CardDescription>Select a preset amount for a quick top-up.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Robux</TableHead>
-                                <TableHead>Price (Rp)</TableHead>
-                                <TableHead></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {priceList.map(({ robux, price, discount }) => (
-                                <TableRow key={robux}>
-                                    <TableCell className="font-medium flex items-center gap-2">
-                                        {robux} R$
-                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
-                                    </TableCell>
-                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux)}>
-                                            Select
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
-        </div>
         {/* Calculator */}
         <div className="lg:col-span-1">
              <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
@@ -142,6 +115,32 @@ export function RobuxTopUpForm() {
                                         <Input type="number" {...field} className="bg-input pl-10" />
                                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R$</span>
                                     </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="gamepassUrl"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Gamepass Link</FormLabel>
+                                <FormControl>
+                                <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-input" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="discordUsername"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Discord Username (Optional)</FormLabel>
+                                <FormControl>
+                                <Input placeholder="your_discord_name" {...field} className="bg-input" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -187,6 +186,42 @@ export function RobuxTopUpForm() {
                     </CardFooter>
                 </form>
                 </Form>
+            </Card>
+        </div>
+        {/* Price List */}
+        <div className="lg:col-span-1">
+            <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
+                <CardHeader>
+                    <CardTitle>Price List</CardTitle>
+                    <CardDescription>Select a preset amount for a quick top-up.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Robux</TableHead>
+                                <TableHead>Price (Rp)</TableHead>
+                                <TableHead></TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {priceList.map(({ robux, price, discount }) => (
+                                <TableRow key={robux}>
+                                    <TableCell className="font-medium flex items-center gap-2">
+                                        {robux} R$
+                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
+                                    </TableCell>
+                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux)}>
+                                            Select
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
             </Card>
         </div>
     </div>
