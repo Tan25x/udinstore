@@ -50,7 +50,7 @@ export function RobuxTopUpForm() {
     },
   });
   
-  const handlePriceSelect = (robux: number, price: number) => {
+  const handlePriceSelect = (robux: number) => {
     form.setValue('robuxAmount', robux);
   };
 
@@ -70,46 +70,9 @@ export function RobuxTopUpForm() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-        {/* Price List */}
-        <div className="lg:col-span-2">
-            <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
-                <CardHeader>
-                    <CardTitle>Price List</CardTitle>
-                    <CardDescription>Select a preset amount or use the calculator.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Robux</TableHead>
-                                <TableHead>Price (Rp)</TableHead>
-                                <TableHead></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {priceList.map(({ robux, price, discount }) => (
-                                <TableRow key={robux}>
-                                    <TableCell className="font-medium flex items-center gap-2">
-                                        {robux} R$
-                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
-                                    </TableCell>
-                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux, price)}>
-                                            Select
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
-        </div>
-
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Calculator */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-1">
              <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
                 <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -177,6 +140,43 @@ export function RobuxTopUpForm() {
                     </CardFooter>
                 </form>
                 </Form>
+            </Card>
+        </div>
+
+        {/* Price List */}
+        <div className="lg:col-span-1">
+            <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
+                <CardHeader>
+                    <CardTitle>Price List</CardTitle>
+                    <CardDescription>Select a preset amount or use the calculator.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Robux</TableHead>
+                                <TableHead>Price (Rp)</TableHead>
+                                <TableHead></TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {priceList.map(({ robux, price, discount }) => (
+                                <TableRow key={robux}>
+                                    <TableCell className="font-medium flex items-center gap-2">
+                                        {robux} R$
+                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
+                                    </TableCell>
+                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux)}>
+                                            Select
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
             </Card>
         </div>
     </div>
