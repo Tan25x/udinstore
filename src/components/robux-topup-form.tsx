@@ -71,6 +71,42 @@ export function RobuxTopUpForm() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        {/* Price List */}
+        <div className="lg:col-span-1">
+            <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
+                <CardHeader>
+                    <CardTitle>Price List</CardTitle>
+                    <CardDescription>Select a preset amount for a quick top-up.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Robux</TableHead>
+                                <TableHead>Price (Rp)</TableHead>
+                                <TableHead></TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {priceList.map(({ robux, price, discount }) => (
+                                <TableRow key={robux}>
+                                    <TableCell className="font-medium flex items-center gap-2">
+                                        {robux} R$
+                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
+                                    </TableCell>
+                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux)}>
+                                            Select
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
         {/* Calculator */}
         <div className="lg:col-span-1">
              <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
@@ -78,7 +114,7 @@ export function RobuxTopUpForm() {
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <CardHeader>
                         <CardTitle>Gamepass Price Calculator</CardTitle>
-                        <CardDescription>Enter your details to begin the top-up process.</CardDescription>
+                        <CardDescription>Enter your details for a custom top-up amount.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <FormField
@@ -119,9 +155,9 @@ export function RobuxTopUpForm() {
                             </div>
                             </FormControl>
                             <FormDescription>
-                                Price includes the 30% Roblox tax. You must set your Game Pass to this exact price.
+                                You must set your Game Pass to this exact price.
                                 <Link href="/tutorial" className="text-primary hover:underline ml-1">
-                                Follow our tutorial.
+                                Need help?
                                 </Link>
                             </FormDescription>
                         </FormItem>
@@ -140,43 +176,6 @@ export function RobuxTopUpForm() {
                     </CardFooter>
                 </form>
                 </Form>
-            </Card>
-        </div>
-
-        {/* Price List */}
-        <div className="lg:col-span-1">
-            <Card className="w-full bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
-                <CardHeader>
-                    <CardTitle>Price List</CardTitle>
-                    <CardDescription>Select a preset amount or use the calculator.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Robux</TableHead>
-                                <TableHead>Price (Rp)</TableHead>
-                                <TableHead></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {priceList.map(({ robux, price, discount }) => (
-                                <TableRow key={robux}>
-                                    <TableCell className="font-medium flex items-center gap-2">
-                                        {robux} R$
-                                        {discount && <Badge variant="destructive" className="flex items-center gap-1"><Sparkles className="h-3 w-3" /> {discount}</Badge>}
-                                    </TableCell>
-                                    <TableCell>{price.toLocaleString('id-ID')}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Button size="sm" variant="ghost" onClick={() => handlePriceSelect(robux)}>
-                                            Select
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
             </Card>
         </div>
     </div>

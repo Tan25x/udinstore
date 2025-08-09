@@ -6,10 +6,10 @@ export default function Pricing() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline">
-            Top-Up Your Robux
+            Start Your Top-Up
           </h2>
           <p className="mt-4 text-muted-foreground md:text-xl">
-            Choose a preset amount from our price list or enter a custom value in the calculator below. We'll handle the tax calculations for you.
+            Choose a preset amount from our price list or enter a custom value in the calculator below. We'll handle the tax calculations for you, including the 30% Roblox tax.
           </p>
         </div>
         <div className="mt-16">
