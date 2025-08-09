@@ -20,11 +20,11 @@ export default function Header() {
           <span className="text-xl font-bold text-foreground">ud1nshp</span>
         </Link>
         <div className="hidden md:flex items-center gap-2">
-            <Button asChild size="sm">
-                <Link href="/#top-up">Buy Now</Link>
-            </Button>
              <Button asChild variant="secondary" size="sm">
                 <Link href="/tutorial">Tutorial</Link>
+            </Button>
+            <Button asChild size="sm">
+                <Link href="/#top-up">Buy Now</Link>
             </Button>
         </div>
       </div>
