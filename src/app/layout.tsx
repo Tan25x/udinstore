@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'ud1nshp - Cheapest & Easiest Robux Top-Ups',
-  description: 'The cheapest, fastest and easiest way to top up your Robux. Secure payments and instant delivery.',
+  title: 'ud1nshp - Cheapest & Safest Robux Top-Ups',
+  description: 'The cheapest, fastest and safest way to top up your Robux. Secure payments and instant delivery.',
 };
 
 export default function RootLayout({
