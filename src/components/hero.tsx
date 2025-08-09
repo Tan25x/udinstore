@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
+import { AnimatedGradientText } from './ui/animated-gradient-text';
 
 export default function Hero() {
   return (
@@ -22,9 +22,9 @@ export default function Hero() {
         </p>
         <div className="flex flex-col gap-4 sm:flex-row justify-center">
           <Link href="#top-up">
-            <Button size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/30 transition-all hover:shadow-primary/50 hover:scale-105">
-              Buy Now
-            </Button>
+            <AnimatedGradientText>
+                Buy Now
+            </AnimatedGradientText>
           </Link>
           <Link href="/tutorial">
              <Button size="lg" variant="outline" className="w-full sm:w-auto transition-all hover:bg-primary/10 hover:text-primary-foreground hover:scale-105">

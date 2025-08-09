@@ -88,10 +88,15 @@ export default {
             height: '0',
           },
         },
+        "gradient-background-1": {
+          "0%, 16.667%, 100%": { opacity: "1" },
+          "33.333%, 83.333%": { opacity: "0" },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        "gradient-background-1": "gradient-background-1 8s infinite",
       },
     },
   },
