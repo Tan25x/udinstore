@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { AnimatedGradientText } from './ui/animated-gradient-text';
 
 export default function Hero() {
   return (
@@ -21,11 +20,9 @@ export default function Hero() {
           Get the best prices for Robux with our secure and automated top-up service. No passwords, no hassle. Just pure gaming fuel.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row justify-center">
-          <Link href="#top-up">
-            <AnimatedGradientText>
-                Buy Now
-            </AnimatedGradientText>
-          </Link>
+          <Button asChild size="lg">
+            <Link href="#top-up">Buy Now</Link>
+          </Button>
           <Link href="/tutorial">
              <Button size="lg" variant="outline" className="w-full sm:w-auto transition-all hover:bg-primary/10 hover:text-primary-foreground hover:scale-105">
               Tutorial
