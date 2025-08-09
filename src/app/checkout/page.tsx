@@ -28,8 +28,6 @@ const RobuxCheckoutSchema = z.object({
 
 type RobuxCheckoutFormValues = z.infer<typeof RobuxCheckoutSchema>;
 
-const PRICE_PER_ROBUX = 150; // Example: Rp 150 per Robux
-
 function CheckoutForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -43,7 +41,7 @@ function CheckoutForm() {
   const gamepassPrice = Number(searchParams.get('gamepassPrice')) || 0;
   const gamepassUrl = searchParams.get('gamepassUrl') || '';
   const discordUsername = searchParams.get('discordUsername') || '';
-  const totalPrice = robuxAmount * PRICE_PER_ROBUX;
+  const totalPrice = Number(searchParams.get('totalPayment')) || 0;
 
   const form = useForm<RobuxCheckoutFormValues>({
     resolver: zodResolver(RobuxCheckoutSchema),
@@ -57,7 +55,7 @@ function CheckoutForm() {
   });
 
   useEffect(() => {
-    if (!username || !robuxAmount || !gamepassUrl) {
+    if (!username || !robuxAmount || !gamepassUrl || !totalPrice) {
         toast({
             title: 'Error',
             description: 'Missing order details. Please start again.',
@@ -65,7 +63,7 @@ function CheckoutForm() {
         });
         router.push('/');
     }
-  }, [username, robuxAmount, gamepassUrl, router, toast]);
+  }, [username, robuxAmount, gamepassUrl, totalPrice, router, toast]);
   
 
   const onSubmit: SubmitHandler<RobuxCheckoutFormValues> = async (data) => {

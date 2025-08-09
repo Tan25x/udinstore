@@ -60,7 +60,7 @@ export function RobuxTopUpForm() {
   const gamepassPrice = robuxAmount > 0 ? Math.ceil(robuxAmount / (1 - ROBUX_TAX_RATE)) : 0;
   const taxAmount = gamepassPrice - robuxAmount;
   const selectedPriceItem = priceList.find(p => p.robux === robuxAmount);
-  const totalPayment = selectedPriceItem ? selectedPriceItem.price : 'N/A';
+  const totalPayment = selectedPriceItem ? selectedPriceItem.price : 0;
 
   const onSubmit: SubmitHandler<RobuxTopUpFormValues> = async (data) => {
     setIsLoading(true);
@@ -70,6 +70,7 @@ export function RobuxTopUpForm() {
       robuxAmount: data.robuxAmount.toString(),
       gamepassPrice: gamepassPrice.toString(),
       gamepassUrl: data.gamepassUrl,
+      totalPayment: totalPayment.toString(),
     });
 
     if (data.discordUsername) {
