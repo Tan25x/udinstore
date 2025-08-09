@@ -1,4 +1,4 @@
-import { RobuxTopUpForm } from './robux-topup-form'
+import { RobuxTopUpForm } from './robux-topup-form';
 
 export default function Pricing() {
   return (
@@ -9,7 +9,7 @@ export default function Pricing() {
             Top-Up Your Robux
           </h2>
           <p className="mt-4 text-muted-foreground md:text-xl">
-            Get the best market price. Choose a preset amount or enter a custom value. We'll handle the tax calculations for you.
+            Choose a preset amount from our price list or enter a custom value in the calculator below. We'll handle the tax calculations for you.
           </p>
         </div>
         <div className="mt-16">
@@ -17,5 +17,5 @@ export default function Pricing() {
         </div>
       </div>
     </section>
-  )
+  );
 }
