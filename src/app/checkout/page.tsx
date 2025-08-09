@@ -122,14 +122,14 @@ function CheckoutForm() {
                             <FormLabel>Robux I'll receive</FormLabel>
                                 <div className="relative">
                                     <Input readOnly type="number" value={robuxAmount} className="bg-input pl-10" />
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R$</span>
+                                    <Gem className="absolute left-3 top-1/2 -translate-y-1/2 text-primary h-5 w-5" />
                                 </div>
                         </FormItem>
                         <FormItem>
                             <FormLabel>Gamepass Price</FormLabel>
                             <div className="relative">
                                 <Input readOnly value={gamepassPrice.toLocaleString('id-ID')} className="bg-input pl-10" />
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">Rp</span>
+                                <Gem className="absolute left-3 top-1/2 -translate-y-1/2 text-primary h-5 w-5" />
                             </div>
                             <p className="text-xs text-muted-foreground mt-1">
                               This is the Game Pass price to set on Roblox.
@@ -181,15 +181,15 @@ function CheckoutForm() {
                     <div className="space-y-2 border-t border-primary/20 pt-4">
                         <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Discount</span>
-                            <span>Rp 0</span>
+                            <span className="flex items-center gap-1">Rp 0</span>
                         </div>
                         <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Biaya Admin</span>
-                            <span>Rp 0</span>
+                            <span className="flex items-center gap-1">Rp 0</span>
                         </div>
                         <div className="flex justify-between font-bold text-lg">
                             <span>Total</span>
-                            <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
+                            <span className="flex items-center gap-1">Rp {totalPrice.toLocaleString('id-ID')}</span>
                         </div>
                     </div>
                     
@@ -227,7 +227,7 @@ function CheckoutForm() {
                 <div className="flex justify-center">
                   <Image src="https://placehold.co/256x256.png" data-ai-hint="payment qrcode" alt="QRIS Payment Code" width={256} height={256} className="rounded-lg border-4 border-primary/50" />
                 </div>
-                <p className="mt-4 text-lg font-bold">Total: Rp {totalPrice.toLocaleString('id-ID')}</p>
+                <p className="mt-4 text-lg font-bold flex items-center justify-center gap-1">Total: Rp {totalPrice.toLocaleString('id-ID')}</p>
                 <p className="text-sm text-muted-foreground">Expires in 5 minutes</p>
               </div>
               <Button onClick={resetForm} variant="outline" className="w-full">
