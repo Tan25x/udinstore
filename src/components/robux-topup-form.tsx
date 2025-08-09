@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Calculator, Loader2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -56,6 +56,7 @@ export function RobuxTopUpForm() {
 
   const robuxAmount = form.watch('robuxAmount');
   const gamepassPrice = Math.ceil(robuxAmount / (1 - ROBUX_TAX_RATE));
+  const taxAmount = gamepassPrice - robuxAmount;
 
   const onSubmit: SubmitHandler<RobuxTopUpFormValues> = async (data) => {
     setIsLoading(true);
@@ -146,21 +147,31 @@ export function RobuxTopUpForm() {
                             </FormItem>
                             )}
                         />
-                        <FormItem>
-                            <FormLabel>Required Game Pass Price</FormLabel>
-                            <FormControl>
-                            <div className="relative">
-                                <Input readOnly value={gamepassPrice.toLocaleString('id-ID')} className="bg-input pl-10 font-bold text-primary" />
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R$</span>
+                         <div className="rounded-lg bg-input p-4 space-y-2 text-sm">
+                            <div className="flex items-center gap-2 font-semibold">
+                                <Calculator className="h-5 w-5 text-primary" />
+                                <h3>Price Calculation</h3>
                             </div>
-                            </FormControl>
-                            <FormDescription>
-                                You must set your Game Pass to this exact price.
-                                <Link href="/tutorial" className="text-primary hover:underline ml-1">
-                                Need help?
-                                </Link>
-                            </FormDescription>
-                        </FormItem>
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">You receive:</span>
+                                <span>{robuxAmount.toLocaleString()} R$</span>
+                            </div>
+                             <div className="flex justify-between">
+                                <span className="text-muted-foreground">30% Roblox Tax:</span>
+                                <span>{taxAmount.toLocaleString()} R$</span>
+                            </div>
+                            <div className="flex justify-between font-bold text-primary text-base pt-2 border-t border-white/10">
+                                <span>Set Game Pass Price to:</span>
+                                <span>{gamepassPrice.toLocaleString()} R$</span>
+                            </div>
+                        </div>
+
+                        <FormDescription>
+                            You must set your Game Pass to this exact price.
+                            <Link href="/tutorial" className="text-primary hover:underline ml-1">
+                            Need help?
+                            </Link>
+                        </FormDescription>
                     </CardContent>
                     <CardFooter>
                         <Button type="submit" disabled={isLoading} className="w-full text-lg h-12 shadow-lg shadow-primary/30 transition-transform hover:scale-105">
