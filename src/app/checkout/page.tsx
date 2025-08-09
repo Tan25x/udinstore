@@ -119,14 +119,14 @@ function CheckoutForm() {
                       />
                       <div className="grid grid-cols-2 gap-4">
                         <FormItem>
-                            <FormLabel>Jumlah</FormLabel>
+                            <FormLabel>Robux I'll receive</FormLabel>
                                 <div className="relative">
                                     <Input readOnly type="number" value={robuxAmount} className="bg-input pl-10" />
                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R$</span>
                                 </div>
                         </FormItem>
                         <FormItem>
-                            <FormLabel>Price</FormLabel>
+                            <FormLabel>Gamepass Price</FormLabel>
                             <div className="relative">
                                 <Input readOnly value={gamepassPrice.toLocaleString('id-ID')} className="bg-input pl-10" />
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">Rp</span>
@@ -150,7 +150,6 @@ function CheckoutForm() {
                     <div className="mt-4">
                         <div className="flex items-center justify-between p-3 rounded-md border border-primary/30 bg-input">
                           <div className="flex items-center gap-3">
-                            <Image src="https://placehold.co/100x25.png" alt="QRIS" width={60} height={15} data-ai-hint="payment method" />
                             <span className="font-semibold">QRIS</span>
                           </div>
                         </div>
