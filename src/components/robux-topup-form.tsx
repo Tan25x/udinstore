@@ -10,24 +10,25 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Slider } from '@/components/ui/slider';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Calculator, CheckCircle, Gem, Loader2, QrCode } from 'lucide-react';
+import { CheckCircle, Gem, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 
 const RobuxTopUpSchema = z.object({
   username: z.string().min(3, { message: 'Username must be at least 3 characters.' }),
-  robuxAmount: z.number().min(100, { message: 'Minimum 100 Robux.' }).max(10000, { message: 'Maximum 10,000 Robux.' }),
+  robuxAmount: z.preprocess(
+    (val) => Number(String(val)),
+    z.number().min(100, { message: 'Minimum 100 Robux.' }).max(10000, { message: 'Maximum 10,000 Robux.' })
+  ),
   gamepassUrl: z.string().url({ message: 'Please enter a valid Game Pass URL.' }),
+  coupon: z.string().optional(),
 });
 
 type RobuxTopUpFormValues = z.infer<typeof RobuxTopUpSchema>;
 
 const ROBUX_TAX_RATE = 0.3;
-
-const presetAmounts = [400, 800, 1700, 4500];
+const PRICE_PER_ROBUX = 150; // Example: Rp 150 per Robux
 
 export function RobuxTopUpForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,21 +40,20 @@ export function RobuxTopUpForm() {
     resolver: zodResolver(RobuxTopUpSchema),
     defaultValues: {
       username: '',
-      robuxAmount: 400,
+      robuxAmount: 100,
       gamepassUrl: '',
+      coupon: '',
     },
   });
 
   const robuxAmount = form.watch('robuxAmount');
   const gamepassPrice = Math.ceil(robuxAmount / (1 - ROBUX_TAX_RATE));
-  const taxAmount = gamepassPrice - robuxAmount;
+  const totalPrice = robuxAmount * PRICE_PER_ROBUX;
 
   const onSubmit: SubmitHandler<RobuxTopUpFormValues> = async (data) => {
     setIsLoading(true);
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // On success:
     const newOrderId = `UDN-${Date.now()}`;
     setOrderId(newOrderId);
     setShowConfirmation(true);
@@ -71,143 +71,167 @@ export function RobuxTopUpForm() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-white/5 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
-      <AnimatePresence mode="wait">
-        {showConfirmation && orderId ? (
-          <motion.div
-            key="confirmation"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Dialog open={showConfirmation} onOpenChange={resetForm}>
-              <DialogContent className="bg-background/80 backdrop-blur-lg border-primary/30">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-2xl">
-                    <CheckCircle className="text-green-500" />
-                    Order Confirmation
-                  </DialogTitle>
-                  <DialogDescription>
-                    Your order <span className="font-bold text-primary">{orderId}</span> is ready. Scan the QR code to pay.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="py-4 text-center">
-                  <div className="flex justify-center">
-                    <Image src="https://placehold.co/256x256.png" data-ai-hint="payment qrcode" alt="QRIS Payment Code" width={256} height={256} className="rounded-lg border-4 border-primary/50" />
+    <>
+      <Card className="w-full max-w-4xl mx-auto bg-card/80 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-0">
+              {/* Left Side */}
+              <div className="md:col-span-3 p-6 md:border-r md:border-primary/20">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-primary">Detail Information</h3>
+                    <div className="mt-4 space-y-4">
+                      <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Username</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Example. BeliRbx123" {...field} className="bg-input" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="gamepassUrl"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Gamepass Link</FormLabel>
+                            <FormControl>
+                              <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-input" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="robuxAmount"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Jumlah</FormLabel>
+                              <FormControl>
+                                  <div className="relative">
+                                      <Input type="number" {...field} className="bg-input pl-10" />
+                                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R$</span>
+                                  </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormItem>
+                            <FormLabel>Price</FormLabel>
+                            <div className="relative">
+                                <Input readOnly value={gamepassPrice.toLocaleString('id-ID')} className="bg-input pl-10" />
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">Rp</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              This is the Game Pass price to set on Roblox.
+                            </p>
+                        </FormItem>
+                      </div>
+                    </div>
                   </div>
-                  <p className="mt-4 text-lg font-bold">Total: Rp {gamepassPrice.toLocaleString('id-ID')}</p>
-                  <p className="text-sm text-muted-foreground">Expires in 5 minutes</p>
-                </div>
-                 <Button onClick={resetForm} variant="outline" className="w-full">
-                    Create a New Order
-                  </Button>
-              </DialogContent>
-            </Dialog>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="form"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Gem className="text-primary" />
-                <span>Custom Top-Up</span>
-              </CardTitle>
-              <CardDescription>
-                Enter your details below to start the top-up process.
-              </CardDescription>
-            </CardHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {presetAmounts.map(amount => (
-                        <Button key={amount} type="button" variant={robuxAmount === amount ? "default" : "outline"} onClick={() => form.setValue('robuxAmount', amount, { shouldValidate: true })}>
-                            {amount} R$
-                        </Button>
-                    ))}
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Roblox Username</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g. builderman" {...field} className="bg-black/20" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="robuxAmount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Amount of Robux (R$)</FormLabel>
-                        <FormControl>
-                           <div className="flex items-center gap-4">
-                               <Slider
-                                 min={100}
-                                 max={10000}
-                                 step={50}
-                                 value={[field.value]}
-                                 onValueChange={(value) => field.onChange(value[0])}
-                               />
-                               <span className="font-bold text-primary w-24 text-center">{field.value.toLocaleString()} R$</span>
-                           </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Alert className="bg-primary/5 border-primary/20">
-                    <Calculator className="h-4 w-4 text-primary" />
-                    <AlertTitle>Price Calculation</AlertTitle>
-                    <AlertDescription>
-                        <div className="space-y-1 text-sm mt-2">
-                            <p>You receive: <span className="font-bold text-foreground">{robuxAmount.toLocaleString()} R$</span></p>
-                            <p>30% Roblox Tax: <span className="font-bold text-foreground">{taxAmount.toLocaleString()} R$</span></p>
-                            <p className="font-bold text-primary">Set Game Pass Price to: <span className="text-lg">{gamepassPrice.toLocaleString()} R$</span></p>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-primary">Payment Method</h3>
+                    <div className="mt-4">
+                        <div className="flex items-center justify-between p-3 rounded-md border border-primary/30 bg-input">
+                          <div className="flex items-center gap-3">
+                            <Image src="https://placehold.co/100x25.png" alt="QRIS" width={60} height={15} data-ai-hint="payment method" />
+                            <span className="font-semibold">QRIS</span>
+                          </div>
                         </div>
-                    </AlertDescription>
-                  </Alert>
-                  <FormField
-                    control={form.control}
-                    name="gamepassUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Game Pass URL</FormLabel>
-                        <FormControl>
-                          <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-black/20" />
-                        </FormControl>
-                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" disabled={isLoading} className="w-full shadow-lg shadow-primary/30 transition-transform hover:scale-105">
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      'Proceed to Payment'
-                    )}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Form>
-          </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Side */}
+              <div className="md:col-span-2 p-6">
+                <h3 className="text-lg font-semibold text-primary">Payment Summary</h3>
+                <div className="mt-4 space-y-4">
+                    <div>
+                      <FormLabel>Discount Coupon</FormLabel>
+                      <div className="flex gap-2 mt-1">
+                        <FormField
+                            control={form.control}
+                            name="coupon"
+                            render={({ field }) => (
+                              <FormControl>
+                                <Input placeholder="Enter Code Here" {...field} className="bg-input" />
+                              </FormControl>
+                            )}
+                          />
+                        <Button type="button" variant="secondary" className="shrink-0">Submit</Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 border-t border-primary/20 pt-4">
+                        <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Discount</span>
+                            <span>Rp 0</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Biaya Admin</span>
+                            <span>Rp 0</span>
+                        </div>
+                        <div className="flex justify-between font-bold text-lg">
+                            <span>Total</span>
+                            <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                    
+                    <Button type="submit" disabled={isLoading} className="w-full text-lg h-12 shadow-lg shadow-primary/30 transition-transform hover:scale-105">
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        'Beli Sekarang'
+                      )}
+                    </Button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </Form>
+      </Card>
+      
+      <AnimatePresence>
+        {showConfirmation && orderId && (
+          <Dialog open={showConfirmation} onOpenChange={resetForm}>
+            <DialogContent className="bg-background/80 backdrop-blur-lg border-primary/30">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 text-2xl">
+                  <CheckCircle className="text-green-500" />
+                  Order Confirmation
+                </DialogTitle>
+                <DialogDescription>
+                  Your order <span className="font-bold text-primary">{orderId}</span> is ready. Scan the QR code to pay.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="py-4 text-center">
+                <div className="flex justify-center">
+                  <Image src="https://placehold.co/256x256.png" data-ai-hint="payment qrcode" alt="QRIS Payment Code" width={256} height={256} className="rounded-lg border-4 border-primary/50" />
+                </div>
+                <p className="mt-4 text-lg font-bold">Total: Rp {totalPrice.toLocaleString('id-ID')}</p>
+                <p className="text-sm text-muted-foreground">Expires in 5 minutes</p>
+              </div>
+              <Button onClick={resetForm} variant="outline" className="w-full">
+                  Create a New Order
+                </Button>
+            </DialogContent>
+          </Dialog>
         )}
       </AnimatePresence>
-    </Card>
+    </>
   );
 }
