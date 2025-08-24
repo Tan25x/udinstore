@@ -14,10 +14,11 @@ import { Calculator, Gem, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Slider } from '@/components/ui/slider';
 
 const RobuxTopUpSchema = z.object({
   robuxAmount: z.preprocess(
-    (val) => Number(String(val)),
+    (val) => Number(String(val).replace(/[^0-9]/g, '')),
     z.number().min(70, { message: 'Minimum 70 Robux.' }).max(10000, { message: 'Maximum 10,000 Robux.' })
   ),
 });
@@ -35,6 +36,24 @@ const priceList = [
     { robux: 1000, price: 125000, discount: "12.5%" },
 ];
 
+const calculateCustomPrice = (amount: number) => {
+    if (amount <= 0) return 0;
+    
+    // Find the closest smaller or equal price point
+    let rateItem = priceList.reduce((prev, curr) => {
+        return (curr.robux <= amount && curr.robux > prev.robux) ? curr : prev;
+    });
+
+    // For amounts over 1000, use the 1000 robux rate
+    if (amount > 1000) {
+        rateItem = priceList.find(p => p.robux === 1000)!;
+    }
+
+    const rate = rateItem.price / rateItem.robux;
+    return Math.ceil(amount * rate);
+};
+
+
 export function RobuxTopUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -46,15 +65,26 @@ export function RobuxTopUpForm() {
     },
   });
   
+  const robuxAmount = form.watch('robuxAmount');
+  
   const handlePriceSelect = (robux: number) => {
-    form.setValue('robuxAmount', robux, { shouldValidate: true });
+    form.setValue('robuxAmount', robux, { shouldValidate: true, shouldDirty: true });
+  };
+  
+  const handleSliderChange = (value: number[]) => {
+    form.setValue('robuxAmount', value[0], { shouldValidate: true, shouldDirty: true });
+  };
+  
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.replace(/[^0-9]/g, '');
+    form.setValue('robuxAmount', Number(value), { shouldValidate: true, shouldDirty: true });
   };
 
-  const robuxAmount = form.watch('robuxAmount');
   const gamepassPrice = robuxAmount > 0 ? Math.ceil(robuxAmount / (1 - ROBUX_TAX_RATE)) : 0;
   const taxAmount = gamepassPrice - robuxAmount;
+  
   const selectedPriceItem = priceList.find(p => p.robux === robuxAmount);
-  const totalPayment = selectedPriceItem ? selectedPriceItem.price : 0;
+  const totalPayment = selectedPriceItem ? selectedPriceItem.price : calculateCustomPrice(robuxAmount);
 
   const onSubmit: SubmitHandler<RobuxTopUpFormValues> = async (data) => {
     setIsLoading(true);
@@ -74,9 +104,9 @@ export function RobuxTopUpForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader>
             <CardTitle>Start Your Top-Up</CardTitle>
-            <CardDescription>Select a preset amount. We include the 30% Roblox tax.</CardDescription>
+            <CardDescription>Select a preset amount or use the slider for a custom amount. We include the 30% Roblox tax.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8">
             <div>
               <FormLabel>Price List</FormLabel>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
@@ -104,6 +134,37 @@ export function RobuxTopUpForm() {
               </div>
             </div>
 
+            <FormField
+              control={form.control}
+              name="robuxAmount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Custom Amount</FormLabel>
+                   <div className="flex items-center gap-4">
+                     <div className="relative w-full">
+                      <Gem className="absolute left-3 top-1/2 -translate-y-1/2 text-primary h-5 w-5 pointer-events-none" />
+                      <Input 
+                        {...field}
+                        onChange={handleInputChange}
+                        value={field.value || ''}
+                        className="pl-10 text-lg font-bold"
+                        placeholder="Enter amount"
+                      />
+                     </div>
+                   </div>
+                  <Slider
+                    min={70}
+                    max={10000}
+                    step={10}
+                    value={[field.value || 70]}
+                    onValueChange={handleSliderChange}
+                    className="mt-4"
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="rounded-lg bg-input p-4 space-y-2 text-sm">
               <div className="flex items-center gap-2 font-semibold">
                 <Calculator className="h-5 w-5 text-primary" />
@@ -123,7 +184,7 @@ export function RobuxTopUpForm() {
               </div>
               <div className="flex justify-between font-bold text-base border-t border-white/10 pt-2 mt-2">
                 <span>You will pay:</span>
-                <span className='text-primary'>Rp {typeof totalPayment === 'number' ? totalPayment.toLocaleString('id-ID') : '...'}</span>
+                <span className='text-primary'>Rp {totalPayment > 0 ? totalPayment.toLocaleString('id-ID') : '...'}</span>
               </div>
               <FormDescription className="pt-2">
                 You must set your Game Pass to the exact price shown above.
@@ -134,7 +195,7 @@ export function RobuxTopUpForm() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={isLoading} className="w-full text-lg h-12 shadow-lg shadow-primary/30 transition-transform hover:scale-105">
+            <Button type="submit" disabled={isLoading || !form.formState.isValid} className="w-full text-lg h-12 shadow-lg shadow-primary/30 transition-transform hover:scale-105">
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
