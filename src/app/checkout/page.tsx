@@ -19,11 +19,8 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 
 const RobuxCheckoutSchema = z.object({
-  username: z.string(),
   robuxAmount: z.number(),
-  gamepassUrl: z.string().url({ message: 'Please enter a valid Game Pass URL.' }),
   coupon: z.string().optional(),
-  discordUsername: z.string().optional(),
 });
 
 type RobuxCheckoutFormValues = z.infer<typeof RobuxCheckoutSchema>;
@@ -36,26 +33,20 @@ function CheckoutForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const username = searchParams.get('username') || '';
   const robuxAmount = Number(searchParams.get('robuxAmount')) || 0;
   const gamepassPrice = Number(searchParams.get('gamepassPrice')) || 0;
-  const gamepassUrl = searchParams.get('gamepassUrl') || '';
-  const discordUsername = searchParams.get('discordUsername') || '';
   const totalPrice = Number(searchParams.get('totalPayment')) || 0;
 
   const form = useForm<RobuxCheckoutFormValues>({
     resolver: zodResolver(RobuxCheckoutSchema),
     defaultValues: {
-      username: username,
       robuxAmount: robuxAmount,
-      gamepassUrl: gamepassUrl,
       coupon: '',
-      discordUsername: discordUsername,
     },
   });
 
   useEffect(() => {
-    if (!username || !robuxAmount || !gamepassUrl || !totalPrice) {
+    if (!robuxAmount || !totalPrice) {
         toast({
             title: 'Error',
             description: 'Missing order details. Please start again.',
@@ -63,7 +54,7 @@ function CheckoutForm() {
         });
         router.push('/');
     }
-  }, [username, robuxAmount, gamepassUrl, totalPrice, router, toast]);
+  }, [robuxAmount, totalPrice, router, toast]);
   
 
   const onSubmit: SubmitHandler<RobuxCheckoutFormValues> = async (data) => {
@@ -98,25 +89,6 @@ function CheckoutForm() {
                   <div>
                     <h3 className="text-lg font-semibold text-primary">Detail Information</h3>
                     <div className="mt-4 space-y-4">
-                       <FormItem>
-                          <FormLabel>Username</FormLabel>
-                          <FormControl>
-                            <Input readOnly value={username} className="bg-input" />
-                          </FormControl>
-                        </FormItem>
-                      <FormField
-                        control={form.control}
-                        name="gamepassUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Gamepass Link</FormLabel>
-                            <FormControl>
-                              <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-input" readOnly/>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                       <div className="grid grid-cols-2 gap-4">
                         <FormItem>
                             <FormLabel>Robux I'll receive</FormLabel>
@@ -136,12 +108,6 @@ function CheckoutForm() {
                             </p>
                         </FormItem>
                       </div>
-                       {discordUsername && <FormItem>
-                          <FormLabel>Discord Username</FormLabel>
-                          <FormControl>
-                            <Input readOnly value={discordUsername} className="bg-input" />
-                          </FormControl>
-                        </FormItem>}
                     </div>
                   </div>
 

@@ -16,13 +16,10 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const RobuxTopUpSchema = z.object({
-  username: z.string().min(3, { message: 'Username must be at least 3 characters.' }),
   robuxAmount: z.preprocess(
     (val) => Number(String(val)),
     z.number().min(70, { message: 'Minimum 70 Robux.' }).max(10000, { message: 'Maximum 10,000 Robux.' })
   ),
-  gamepassUrl: z.string().url({ message: 'Please enter a valid Game Pass URL.' }),
-  discordUsername: z.string().optional(),
 });
 
 type RobuxTopUpFormValues = z.infer<typeof RobuxTopUpSchema>;
@@ -45,10 +42,7 @@ export function RobuxTopUpForm() {
   const form = useForm<RobuxTopUpFormValues>({
     resolver: zodResolver(RobuxTopUpSchema),
     defaultValues: {
-      username: '',
       robuxAmount: 100,
-      gamepassUrl: '',
-      discordUsername: '',
     },
   });
   
@@ -66,16 +60,10 @@ export function RobuxTopUpForm() {
     setIsLoading(true);
     
     const params = new URLSearchParams({
-      username: data.username,
       robuxAmount: data.robuxAmount.toString(),
       gamepassPrice: gamepassPrice.toString(),
-      gamepassUrl: data.gamepassUrl,
       totalPayment: totalPayment.toString(),
     });
-
-    if (data.discordUsername) {
-        params.set('discordUsername', data.discordUsername);
-    }
     
     router.push(`/checkout?${params.toString()}`);
   };
@@ -86,7 +74,7 @@ export function RobuxTopUpForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader>
             <CardTitle>Start Your Top-Up</CardTitle>
-            <CardDescription>Select a preset amount or enter details. We include the 30% Roblox tax.</CardDescription>
+            <CardDescription>Select a preset amount. We include the 30% Roblox tax.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
@@ -114,48 +102,6 @@ export function RobuxTopUpForm() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Roblox Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your Roblox Username" {...field} className="bg-input" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="gamepassUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Gamepass Link</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://www.roblox.com/game-pass/..." {...field} className="bg-input" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="discordUsername"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Discord Username (Optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="your_discord_name" {...field} className="bg-input" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
             <div className="rounded-lg bg-input p-4 space-y-2 text-sm">
