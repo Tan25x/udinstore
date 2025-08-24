@@ -1,8 +1,7 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
 const tutorialSteps = [
@@ -15,8 +14,6 @@ const tutorialSteps = [
             "In the left menu of your game's page, scroll down and click on 'Passes'.",
             "Click the 'Create a Pass' button."
         ],
-        image: "https://placehold.co/600x400.png",
-        imageHint: "gaming setup interface"
     },
     {
         title: "Step 2: Configure Your Game Pass",
@@ -26,8 +23,6 @@ const tutorialSteps = [
             "Add a description if you want (optional).",
             "Click 'Create Pass'. Your pass is now created but not for sale yet."
         ],
-        image: "https://placehold.co/600x400.png",
-        imageHint: "form creation settings"
     },
     {
         title: "Step 3: Set the Price",
@@ -39,8 +34,6 @@ const tutorialSteps = [
             "Roblox will show you the amount you'll receive after their 30% fee. This should match the Robux amount you entered on our site.",
             "Click 'Save changes'."
         ],
-        image: "https://placehold.co/600x400.png",
-        imageHint: "pricing sales ecommerce"
     },
     {
         title: "Step 4: Get the Game Pass URL",
@@ -49,8 +42,6 @@ const tutorialSteps = [
             "Copy the URL from your browser's address bar.",
             "This is the link you need to paste into the 'Game Pass URL' field on our Top-Up form."
         ],
-        image: "https://placehold.co/600x400.png",
-        imageHint: "web browser link"
     }
 ];
 
@@ -69,8 +60,22 @@ export default function TutorialPage() {
                     How to Create a Game Pass
                 </h1>
                 <p className="mt-4 max-w-2xl mx-auto text-muted-foreground md:text-xl">
-                    Follow these simple steps to create a Game Pass on Roblox and get your Robux.
+                    Follow this video guide or the steps below to create a Game Pass on Roblox.
                 </p>
+            </div>
+
+            <div className="mb-12">
+                <div className="aspect-video w-full">
+                    <iframe 
+                        className="w-full h-full rounded-lg shadow-2xl shadow-primary/20 border-2 border-primary/20"
+                        src="https://www.youtube.com/embed/Hl9QPHIXWHk" 
+                        title="YouTube video player" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerPolicy="strict-origin-when-cross-origin" 
+                        allowFullScreen>
+                    </iframe>
+                </div>
             </div>
 
             <Card className="bg-white/5 backdrop-blur-md border-primary/20 shadow-2xl shadow-primary/10">
@@ -82,25 +87,13 @@ export default function TutorialPage() {
                                     {step.title}
                                 </AccordionTrigger>
                                 <AccordionContent className="pt-4">
-                                    <div className="grid md:grid-cols-2 gap-6 items-center">
-                                        <div className="space-y-3 text-muted-foreground">
-                                            {step.content.map((line, i) => (
-                                                <div key={i} className="flex items-start gap-3">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2.5" />
-                                                    <p>{line}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex justify-center">
-                                            <Image
-                                                src={step.image}
-                                                alt={`Tutorial step ${index + 1}`}
-                                                width={600}
-                                                height={400}
-                                                className="rounded-lg shadow-lg border-2 border-primary/20"
-                                                data-ai-hint={step.imageHint}
-                                            />
-                                        </div>
+                                    <div className="space-y-3 text-muted-foreground">
+                                        {step.content.map((line, i) => (
+                                            <div key={i} className="flex items-start gap-3">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2.5" />
+                                                <p>{line}</p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </AccordionContent>
                             </AccordionItem>
