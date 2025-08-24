@@ -139,9 +139,9 @@ export function RobuxTopUpForm() {
               name="robuxAmount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Robux Slider</FormLabel>
+                  <FormLabel>Custom Amount</FormLabel>
                    <div className="flex items-center gap-4">
-                     <div className="relative w-full">
+                     <div className="relative w-[180px]">
                       <Gem className="absolute left-3 top-1/2 -translate-y-1/2 text-primary h-5 w-5 pointer-events-none" />
                       <Input 
                         {...field}
@@ -151,15 +151,15 @@ export function RobuxTopUpForm() {
                         placeholder="Enter amount"
                       />
                      </div>
+                      <Slider
+                        min={70}
+                        max={10000}
+                        step={10}
+                        value={[field.value || 70]}
+                        onValueChange={handleSliderChange}
+                        className="w-full"
+                      />
                    </div>
-                  <Slider
-                    min={70}
-                    max={10000}
-                    step={10}
-                    value={[field.value || 70]}
-                    onValueChange={handleSliderChange}
-                    className="mt-4"
-                  />
                   <FormMessage />
                 </FormItem>
               )}
