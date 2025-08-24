@@ -139,7 +139,7 @@ export function RobuxTopUpForm() {
               name="robuxAmount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Custom Amount</FormLabel>
+                  <FormLabel>Robux Slider</FormLabel>
                    <div className="flex items-center gap-4">
                      <div className="relative w-full">
                       <Gem className="absolute left-3 top-1/2 -translate-y-1/2 text-primary h-5 w-5 pointer-events-none" />
@@ -195,15 +195,10 @@ export function RobuxTopUpForm() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={isLoading || !form.formState.isValid} className="w-full text-lg h-12 shadow-lg shadow-primary/30 transition-transform hover:scale-105">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Proceeding...
-                </>
-              ) : (
-                'Proceed to Payment'
-              )}
+            <Button asChild disabled={!form.formState.isValid} className="w-full text-lg h-12 shadow-lg shadow-primary/30 transition-transform hover:scale-105">
+                <Link href="https://discord.gg/vfnXNNPvXq" target="_blank">
+                    Join Discord to Pay
+                </Link>
             </Button>
           </CardFooter>
         </form>
