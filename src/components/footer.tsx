@@ -11,14 +11,14 @@ export default function Footer() {
           <div className="space-y-2">
             <Link href="/" className="flex items-center gap-2">
               <Gem className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-foreground">ud1nshp</span>
+              <span className="text-xl font-bold text-foreground">tokoudin.xyz</span>
             </Link>
             <p className="text-sm text-muted-foreground">Secure & Instant Robux Top-Ups.</p>
              <div className="flex gap-4 pt-2">
-               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <MessageSquare className="h-5 w-5" />
-                <span>Need help? Hit me up on Discord!</span>
-              </div>
+                <Link href="https://discord.gg/vfnXNNPvXq" target="_blank" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <MessageSquare className="h-5 w-5" />
+                    <span>Need help? Hit us up on Discord!</span>
+                </Link>
             </div>
           </div>
           <div className="col-span-2 space-y-4">
@@ -32,7 +32,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-primary/10 pt-4 text-center text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} ud1nshp. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} tokoudin.xyz. All rights reserved.</p>
         </div>
       </div>
     </footer>

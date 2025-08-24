@@ -102,7 +102,7 @@ export default function TutorialPage() {
                 </CardContent>
             </Card>
              <p className="text-center text-muted-foreground mt-8">
-                Still have questions? <Link href="/" className="text-primary hover:underline">Contact us on Discord!</Link>
+                Still have questions? <Link href="https://discord.gg/vfnXNNPvXq" target="_blank" className="text-primary hover:underline">Contact us on Discord!</Link>
             </p>
           </div>
         </main>
